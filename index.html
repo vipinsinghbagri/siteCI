@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Cool CI Page</title>
+<style>
+    body {
+        margin: 0;
+        background: black;
+        color: #00ff9f;
+        font-family: monospace;
+        overflow: hidden;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 24px;
+        color: #00ff9f;
+    }
+
+    .glow {
+        text-shadow: 0 0 5px #00ff9f, 0 0 10px #00ff9f;
+    }
+
+    .matrix {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.08;
+    }
+
+    #text {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+</style>
+</head>
+
+<body>
+<canvas class="matrix"></canvas>
+
+<div class="container">
+    <div class="title glow">🚀 GitHub CI Static Page Running...</div>
+    <div id="text"></div>
+</div>
+
+<script>
+// typing effect
+const message = [
+    "Initializing CI pipeline...",
+    "Connecting to GitHub Actions...",
+    "Deploying static site...",
+    "Build successful ✔",
+    "Site is live 🚀",
+    "Hello from GitHub Codebase editor!"
+];
+
+let i = 0;
+let j = 0;
+let current = "";
+let element = document.getElementById("text");
+
+function type() {
+    if (i < message.length) {
+        if (j < message[i].length) {
+            current += message[i][j];
+            j++;
+            element.innerHTML = current + "|";
+        } else {
+            current += "<br/>";
+            i++;
+            j = 0;
+        }
+    } else {
+        i = 0;
+        current = "";
+    }
+    setTimeout(type, 80);
+}
+type();
+
+// matrix rain effect
+const canvas = document.querySelector('.matrix');
+const ctx = canvas.getContext('2d');
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+let letters = "01GHCIWEBDEPLOY";
+letters = letters.split("");
+
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for (let x = 0; x < columns; x++)
+    drops[x] = 1;
+
+function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff9f";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975)
+            drops[i] = 0;
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 35);
+</script>
+
+</body>
+</html>
